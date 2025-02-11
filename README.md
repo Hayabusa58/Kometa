@@ -2,7 +2,7 @@
 
 ## 概要
 軽量でシンプルな静的サイトジェネレータです。
-"Kometa" とはイタリア語で「彗星」を表します。
+"Kometa" とはチェコ語で「彗星」を表します。
 
 ## 機能
 - Markdown 形式での記事執筆
@@ -59,7 +59,7 @@ $ python kometa.py new article-title
 
 ### 記事の出力
 ```
-$ python kometa.py build articile-title
+$ python kometa.py build article-title
 ```
 上記コマンドは指定した visibility に応じて適切なディレクトリに HTML ファイルを出力し、埋め込んだ画像ファイルをコピーします。
 また画像ファイルの Exif 情報をすべて削除します。
