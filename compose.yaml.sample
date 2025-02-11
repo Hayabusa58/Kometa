@@ -1,0 +1,11 @@
+services:
+  nginx:
+    restart: always
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./out:/usr/share/nginx/html/sample.example.com
+      - ./.htpasswd:/etc/nginx/.htpasswd:ro
