@@ -2,3 +2,4 @@
 .venv
 article
 out
+.htpasswd
