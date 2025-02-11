@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 45em; 
+    margin: 0 auto;
+}
+h1 {
+    color: #333;
+}
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+a:hover {
+    text-decoration: underline;
+}
+img {
+    max-width: 75%;
+    height: auto;
+}
