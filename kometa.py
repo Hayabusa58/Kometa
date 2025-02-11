@@ -66,7 +66,7 @@ def convert_article(title):
         
 
 def run_dev():
-    subprocess.run(["docker compose", "up", "-d"], check=True)
+    subprocess.run(["docker", "compose", "up"], check=True)
 
 # def publish():
 
