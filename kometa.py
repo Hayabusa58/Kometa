@@ -9,12 +9,40 @@ import markdown
 import datetime
 import argparse
 
+# load_dotenv()
+
 BASE_DIR = Path(__file__).parent
+
+# ./article/
 ARTICLE_BASE_DIR = BASE_DIR / "article"
-OUT_BASE_DIR = BASE_DIR / "out" / "article"
+
+# ./out/article/
+OUT_ARTICLE_BASE_DIR = BASE_DIR / "out" / "article"
+
+# ./template/
 TEMPLATE_DIR = BASE_DIR / "template"
 
-load_dotenv()
+def init():
+    # 出力ディレクトリの作成
+    # ./out/article/public/
+    out_article_public_dir = OUT_ARTICLE_BASE_DIR / "public"
+    # ./out/article/limited
+    out_article_limited_dir = OUT_ARTICLE_BASE_DIR / "limited"
+
+    out_article_public_dir.mkdir(exist_ok=True, parents=True)
+    out_article_limited_dir.mkdir(exist_ok=True, parents=True)
+
+    template_index_path = TEMPLATE_DIR / "index.html"
+    template_css_path = TEMPLATE_DIR / "style.css"
+
+    # index.html, style.css のコピー
+    # ./out/index.html
+    out_index_path = BASE_DIR / "out" / "index.html"
+    # ./out/style.css
+    out_css_path = BASE_DIR / "out" / "style.css"
+
+    shutil.copy(template_css_path, out_css_path)
+    shutil.copy(template_index_path, out_index_path)
 
 def create_article(title):
     date_obj = datetime.datetime.now()
@@ -56,9 +84,9 @@ def convert_article(title):
             return
         html_output = template.render(content=html_content)
         if visibility == "public":
-            article_out_dir = OUT_BASE_DIR / "public" / title
+            article_out_dir = OUT_ARTICLE_BASE_DIR / "public" / title
         elif visibility == "limited":
-            article_out_dir = OUT_BASE_DIR / "limited" / title
+            article_out_dir = OUT_ARTICLE_BASE_DIR / "limited" / title
         article_out_dir.mkdir(exist_ok=True, parents=True)
         output_html_path = article_out_dir / (md_file.stem + ".html")
         output_html_path.write_text(html_output, encoding="utf-8")
@@ -83,11 +111,12 @@ def run_dev():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["new", "build", "dev", "publish"], help="実行するコマンド")
+    parser.add_argument("command", choices=["init", "new", "build", "dev", "publish"], help="Command")
     parser.add_argument("title", nargs="?", help="article title")
     args = parser.parse_args()
-
-    if args.command == "new" and args.title:
+    if args.command == "init":
+        init()
+    elif args.command == "new" and args.title:
         create_article(args.title)
     elif args.command == "build" and args.title:
         convert_article(args.title)
