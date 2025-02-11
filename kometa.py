@@ -26,8 +26,7 @@ def create_article(title):
     if article_file_path.exists():
         print("Error: Same name article has already exits.")
         return
-    article_file_path.write_text(f"""
----
+    article_file_path.write_text(f"""---
 title: {title}
 date: {date}
 ---
@@ -42,14 +41,25 @@ def convert_article(title):
     template = j2_env.get_template("base.html")
     
     article_dir = ARTICLE_BASE_DIR / title
-    article_out_dir = OUT_BASE_DIR / title
-    article_out_dir.mkdir(exist_ok=True, parents=True)
+    # article_out_dir = OUT_BASE_DIR / title
+    # article_out_dir.mkdir(exist_ok=True, parents=True)
 
     print("Generating html...")
     for md_file in article_dir.glob("*.md"):
         content = md_file.read_text(encoding="utf-8")
-        html_content = markdown.markdown(content, extensions=["meta"])
+        md = markdown.Markdown(extensions=["meta"])
+        html_content = md.convert(content)
+        try:
+            visibility = md.Meta["visibility"][0]
+        except KeyError:
+            print("Error: visibility is not defined in article.")
+            return
         html_output = template.render(content=html_content)
+        if visibility == "public":
+            article_out_dir = OUT_BASE_DIR / "public" / title
+        elif visibility == "limited":
+            article_out_dir = OUT_BASE_DIR / "limited" / title
+        article_out_dir.mkdir(exist_ok=True, parents=True)
         output_html_path = article_out_dir / (md_file.stem + ".html")
         output_html_path.write_text(html_output, encoding="utf-8")
         print(f"Generated article: {output_html_path}")
