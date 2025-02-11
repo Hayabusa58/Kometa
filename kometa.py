@@ -44,6 +44,10 @@ def init():
     shutil.copy(template_css_path, out_css_path)
     shutil.copy(template_index_path, out_index_path)
 
+    # .htpasswd ファイルの作成
+    # htpasswd_dir = BASE_DIR / ".htpasswd"
+    # htpasswd_dir.write_text("")
+
 def create_article(title):
     date_obj = datetime.datetime.now()
     date = str(date_obj.date())
